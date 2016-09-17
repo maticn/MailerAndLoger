@@ -45,13 +45,13 @@ namespace MailerAndLoger
             }
             catch (ObjectDisposedException)
             {
-                string error = "Pisanje v datoteko exc: ObjectDisposedException.";
+                string error = "Writing in file exception: ObjectDisposedException.";
                 Console.WriteLine(error);
                 PrintInFile(error, null, Strings.ERROR_PATH_DISK + ERROR_FOLDER + ERROR_FILE, false);
             }
             catch (IndexOutOfRangeException)
             {
-                string error = "Pisanje v datoteko exc: IndexOutOfRangeException.";
+                string error = "Writing in file exception: IndexOutOfRangeException.";
                 Console.WriteLine(error);
                 PrintInFile(error, null, Strings.ERROR_PATH_DISK + ERROR_FOLDER + ERROR_FILE, false);
             }

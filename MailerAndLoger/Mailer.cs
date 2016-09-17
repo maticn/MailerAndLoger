@@ -15,23 +15,27 @@ namespace MailerAndLoger
         {
             string ERROR_FOLDER = "";
             string ERROR_FILE = "";
-
+            
             try
             {
+                string EmailSenderEmail = Environment.GetEnvironmentVariable("EmailSenderEmail", EnvironmentVariableTarget.User);
+                string EmailSenderPassword = Environment.GetEnvironmentVariable("EmailSenderPassword", EnvironmentVariableTarget.User);
+                string EmailReceiverEmail = Environment.GetEnvironmentVariable("EmailReceiverEmail", EnvironmentVariableTarget.User);
+
                 string method_caller = new StackTrace().GetFrame(1).GetMethod().DeclaringType.FullName.ToString();
                 ERROR_FOLDER = Strings.ERROR_FOLDER_AND_FILE(method_caller)[0];
                 ERROR_FILE = Strings.ERROR_FOLDER_AND_FILE(method_caller)[1];
 
-                MailAddress to = new MailAddress("maticnova@gmail.com");
-                MailAddress from = new MailAddress("maticnova@gmail.com");
+                MailAddress to = new MailAddress(EmailReceiverEmail);
+                MailAddress from = new MailAddress(EmailReceiverEmail);
                 MailMessage mail = new MailMessage(from, to);
 
                 if (subject.Equals("?"))
-                    mail.Subject = Strings.OBVESTILO + method_caller;
+                    mail.Subject = Strings.SOURCE_PROJECT + method_caller;
                 else
                     mail.Subject = subject;
 
-                mail.Body = Strings.OBVESTILO + method_caller + Environment.NewLine + "\n";
+                mail.Body = Strings.SOURCE_PROJECT + method_caller + Environment.NewLine + "\n";
                 if (body != null)
                 {
                     foreach (string el in body)
@@ -46,20 +50,20 @@ namespace MailerAndLoger
                 smtp.Host = "smtp.gmail.com";
                 smtp.Port = 587;
 
-                smtp.Credentials = new NetworkCredential("matic@vsegrad.si", "prpoTest15");
+                smtp.Credentials = new NetworkCredential(EmailSenderEmail, EmailSenderPassword);
                 smtp.EnableSsl = true;
-                Console.WriteLine("Poslal bom e-mail.");
+                Console.WriteLine("Sendind an e-mail.");
                 smtp.Send(mail);
             }
             catch (SmtpException ex)
             {
-                string error = "Posiljanje emaila exc: SmtpException";
+                string error = "Sendind an e-mail with exception: SmtpException";
                 Console.WriteLine(error);
                 Loger.PrintInFile(DateTime.Now + " : " + error + " --- " + ex.ToString(), null, Strings.ERROR_PATH_DISK + ERROR_FOLDER + ERROR_FILE, false);
             }
             catch (Exception ex)
             {
-                string error = "Generalni exception v metodi sendEmail.";
+                string error = "General exception in method SendEmail.";
                 Console.WriteLine(error);
                 Loger.PrintInFile(DateTime.Now + " : " + error + " --- " + ex.ToString(), null, Strings.ERROR_PATH_DISK + ERROR_FOLDER + ERROR_FILE, false);
             }
