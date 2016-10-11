@@ -11,7 +11,7 @@ namespace MailerAndLoger
 {
     public class FTPconnect
     {
-        public static bool UploadFileToServer(XmlDocument doc, string FTP_PATH, string FTP_FILE, string UPLOAD_FILE_ERROR_MESSAGE, string FTP_USERNAME, string FTP_PASS)
+        public static bool UploadXmlToServer(XmlDocument doc, string FTP_PATH, string FTP_FILE, string UPLOAD_FILE_ERROR_MESSAGE, string FTP_USERNAME, string FTP_PASS)
         {
             try
             {
@@ -59,6 +59,53 @@ namespace MailerAndLoger
             {
                 Mailer.SendEmail(UPLOAD_FILE_ERROR_MESSAGE + "\n" + ex.ToString(), null);
                 return false;
+            }
+        }
+
+        public static int DownloadImageAndUploadItToFtpServer(string SourceFilePath, string FTP_PATH, string FTP_FILE, string DOWNLOAD_FILE_ERROR_MESSAGE, string UPLOAD_FILE_ERROR_MESSAGE, string FTP_USERNAME, string FTP_PASS)
+        {
+            try
+            {
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FTP_PATH + FTP_FILE);
+                request.Method = WebRequestMethods.Ftp.UploadFile;
+                request.UsePassive = false;
+                request.Credentials = new NetworkCredential(FTP_USERNAME, FTP_PASS);
+
+                // Prenesi sliko s spletnega streznika.
+                try {
+                    WebClient img_request = new WebClient();
+                    byte[] fileData = img_request.DownloadData(SourceFilePath);
+                    request.ContentLength = fileData.Length;
+
+                    Stream requestStream = request.GetRequestStream();
+                    requestStream.Write(fileData, 0, fileData.Length);
+                    requestStream.Close();
+                }
+                catch (Exception ex)
+                {
+                    //Mailer.SendEmail(DOWNLOAD_FILE_ERROR_MESSAGE + "\n" + ex.ToString(), null);
+                    return -2;
+                }
+
+                //Push the request to the server and await its response
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                //We should get a 226 status code back from the server if everything worked out ok
+                if (response.StatusCode == FtpStatusCode.ClosingData)
+                {
+                    response.Close();
+                    return 1;
+                }
+                else {
+                    Console.WriteLine("Error uploading file:" + response.StatusDescription);
+                    Mailer.SendEmail(UPLOAD_FILE_ERROR_MESSAGE + "\n" + response.StatusDescription, null);
+                    response.Close();
+                    return -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                Mailer.SendEmail(UPLOAD_FILE_ERROR_MESSAGE + "\n" + ex.ToString(), null);
+                return -1;
             }
         }
     }
