@@ -9,7 +9,7 @@ namespace MailerAndLoger
 {
     public class Loger
     {
-        public static void PrintInFile(string output, List<string> outputs, string fileNameLoc, bool printConsole)
+        public static void PrintInFile(string output, List<string> outputs, string fileName, bool printConsole)
         {
             string ERROR_FOLDER = "";
             string ERROR_FILE = "";
@@ -20,7 +20,7 @@ namespace MailerAndLoger
                 ERROR_FOLDER = Strings.ERROR_FOLDER_AND_FILE(method_caller)[0];
                 ERROR_FILE = Strings.ERROR_FOLDER_AND_FILE(method_caller)[1];
 
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileNameLoc, true))
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName, true))
                 {
                     if (outputs != null)
                     {
