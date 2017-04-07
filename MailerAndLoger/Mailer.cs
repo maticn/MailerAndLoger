@@ -11,7 +11,7 @@ namespace MailerAndLoger
 {
     public class Mailer
     {
-        public static void SendEmail(string bodyOneLine, List<string> body, string subject = "?")
+        public static void SendEmail(string bodyOneLine, List<string> body, string subject = "?", string emailReceiver = "?")
         {
             string ERROR_FOLDER = "";
             string ERROR_FILE = "";
@@ -20,7 +20,13 @@ namespace MailerAndLoger
             {
                 string EmailSenderEmail = Environment.GetEnvironmentVariable("EmailSenderEmail", EnvironmentVariableTarget.User);
                 string EmailSenderPassword = Environment.GetEnvironmentVariable("EmailSenderPassword", EnvironmentVariableTarget.User);
-                string EmailReceiverEmail = Environment.GetEnvironmentVariable("EmailReceiverEmail", EnvironmentVariableTarget.User);
+
+                string EmailReceiverEmail = "";
+                if (emailReceiver.Equals("?"))
+                    EmailReceiverEmail = Environment.GetEnvironmentVariable("EmailReceiverEmail", EnvironmentVariableTarget.User);
+                else
+                    EmailReceiverEmail = emailReceiver;
+
 
                 string method_caller = new StackTrace().GetFrame(1).GetMethod().DeclaringType.FullName.ToString();
                 ERROR_FOLDER = Strings.ERROR_FOLDER_AND_FILE(method_caller)[0];

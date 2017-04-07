@@ -28,24 +28,24 @@ namespace MailerAndLoger
             }
         }
 
-        static void Main(string[] args)
-        {
-            string method_caller = new StackTrace().GetFrame(1).GetMethod().DeclaringType.FullName.ToString();
-            string fileNameLoc = Strings.ERROR_PATH_DISK + "combinations.txt";
+        //static void Main(string[] args)
+        //{
+        //    string method_caller = new StackTrace().GetFrame(1).GetMethod().DeclaringType.FullName.ToString();
+        //    string fileNameLoc = Strings.ERROR_PATH_DISK + "combinations.txt";
 
-            for (int i=1; i<=10; i++)
-            {
-                IEnumerable<string> res = Combinations(chars, i);
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileNameLoc, true))
-                {
-                    foreach (string s in res)
-                    {
-                        file.WriteLine(s);
-                    }
-                }
-            }
+        //    for (int i=1; i<=10; i++)
+        //    {
+        //        IEnumerable<string> res = Combinations(chars, i);
+        //        using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileNameLoc, true))
+        //        {
+        //            foreach (string s in res)
+        //            {
+        //                file.WriteLine(s);
+        //            }
+        //        }
+        //    }
             
-        }
+        //}
 
     }
 }
