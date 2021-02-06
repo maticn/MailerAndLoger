@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MailerAndLoger
 {
-    class Program
+  class Program
+  {
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            DateTime rojstni_dan = new DateTime(1966, 11, 16); ;
-            int starost = 50;
+      DateTime rojstni_dan = new DateTime(1966, 11, 16); ;
+      int starost = 50;
 
-            if (DateTime.Today.AddYears(-starost).Equals (rojstni_dan))
-            {
-                Console.WriteLine("Vse najboljše za tvojih " + starost + " let.");
-            }
-        }
+      if (DateTime.Today.AddYears(-starost).Equals(rojstni_dan))
+      {
+        Console.WriteLine("Vse najboljše za tvojih " + starost + " let.");
+      }
     }
+  }
 }
